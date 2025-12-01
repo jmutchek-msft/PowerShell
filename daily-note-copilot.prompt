@@ -1,0 +1,62 @@
+# Prompt  
+Name this conversation following this pattern: `Daily Notes for yyyymmdd`.
+
+Create a set of markdown files for all meetings on my calendar today. For each meeting:
+
+## 1. In the **main file** (`yyyymmdd_meetings.md`), include:
+- The **title**, formatted in wikilink style: `[[YYYYMMDD-<sanitized-title>]]`
+- The **time** (e.g., `12:30 PM - 1:00 PM`)
+- The **organizer's name**
+- My **accept status**
+
+Where `<sanitized-title>` is:
+- The meeting title with **all non-filesystem-compatible characters** (e.g., `|`, `/`, `\\`, `:`, `*`, `?`, `"`, `<`, `>`, `&`, `%`, `#`, etc.) replaced with **dashes**
+- Delete all **whitespace characters** around dashes in the filename
+- Then **truncated to 32 characters** (excluding the date prefix and `.md` extension)
+## 2. Create a **separate markdown file** for each meeting titled:
+```
+YYYYMMDD-<sanitized-title>.md
+```
+
+Use the <sanitized-title> created for the main file in step 1.
+
+Each individual file should contain:
+- Date template strings in the markdown are replaced with the **time**
+- The **organizer**
+- A **comma-separated list of attendees**
+
+## 3. Package all generated markdown files into a single tar archive for download.
+
+- Ensure that the tar archive is compatible with Windows and Powershell for extraction using the `tar` command
+- Use **Linux linefeed format** (`\n`) for all files.
+- The archive filename should include today's date in the format "yyyymmdd-meetings.tar"
+
+## Example Output
+
+### Main meeting file
+```
+## Meetings
+### [[20250702-Biweekly 1-1 John Mutchek - Pete Gott]]
+- Time: 12:30 PM - 12:55 PM
+- Organizer: Gott, Peter
+- Accepted
+```
+
+### Individual meeting files
+```
+---
+created: yyyy-mm-dd
+tags:
+  - meeting
+---
+## Notes
+
+## Attendees
+<insert organizer>
+<insert attendees>
+
+---
+*<span style='color:#FCAB00'>dddd, MMMM Do YYYY @ hh:mm</span>*
+[[Unlinked-Meeting]]
+
+```
