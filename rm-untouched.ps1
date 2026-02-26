@@ -22,6 +22,18 @@ param(
     
     [switch]$DryRun
 )
+# Close Obsidian if that app is currently running
+Get-Process -Name "Obsidian" -ErrorAction SilentlyContinue | ForEach-Object {
+    Write-Verbose "Closing Obsidian process (Id: $($_.Id))"
+    $_.CloseMainWindow() | Out-Null
+    Start-Sleep -Seconds 2
+    if (!($_.HasExited)) {
+        Write-Verbose "Obsidian did not close gracefully, terminating process"
+        $_.Kill()
+    } else {
+        Write-Verbose "Obsidian closed successfully"
+    }
+}
 
 # Validate directory exists
 Write-Verbose "Validating directory: $Path"
